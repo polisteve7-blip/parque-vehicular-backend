@@ -1,0 +1,26 @@
+<h1>Gráficos de Costos por Vehículo</h1>
+<canvas id="graficoCostos" width="400" height="200"></canvas>
+
+<script>
+const ctx = document.getElementById('graficoCostos').getContext('2d');
+const grafico = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{ nombres|safe }},
+        datasets: [{
+            label: 'Costo Total ($)',
+            data: {{ costos|safe }},
+            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: { beginAtZero: true }
+        }
+    }
+});
+</script>
+
+<a href="{% url 'dashboard' %}">Volver al Dashboard</a>

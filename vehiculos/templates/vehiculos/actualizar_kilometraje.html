@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Actualizar Kilometraje</title>
+</head>
+<body>
+    <h1>Actualizar KM: {{ vehiculo.marca }} {{ vehiculo.modelo }}</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="kilometraje">Nuevo Kilometraje:</label>
+        <input type="number" name="kilometraje" value="{{ vehiculo.kilometraje_actual }}" required>
+        <button type="submit">Actualizar</button>
+    </form>
+    <a href="{% url 'lista_vehiculos' %}">Cancelar</a>
+</body>
+</html>

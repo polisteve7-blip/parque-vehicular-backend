@@ -1,0 +1,47 @@
+<h1>Reporte de Costos</h1>
+
+<table border="1">
+    <tr>
+        <th>Vehículo</th>
+        <th>Mantenimiento</th>
+        <th>Siniestros</th>
+        <th>Total</th>
+    </tr>
+
+    {% for item in data %}
+    <tr>
+        <td>{{ item.vehiculo }}</td>
+        <td>${{ item.mantenimiento }}</td>
+        <td>${{ item.siniestros }}</td>
+        <td>${{ item.total }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<canvas id="grafica"></canvas>
+
+<script>
+    const data = {
+        labels: [
+            {% for item in data %}
+                "{{ item.vehiculo }}",
+            {% endfor %}
+        ],
+        datasets: [{
+            label: 'Costos Totales',
+            data: [
+                {% for item in data %}
+                    {{ item.total }},
+                {% endfor %}
+            ],
+            backgroundColor: 'rgba(231, 76, 60, 0.7)'
+        }]
+    };
+
+    new Chart(document.getElementById('grafica'), {
+        type: 'bar',
+        data: data
+    });
+</script>
+<a href="{% url 'dashboard' %}">Volver</a>

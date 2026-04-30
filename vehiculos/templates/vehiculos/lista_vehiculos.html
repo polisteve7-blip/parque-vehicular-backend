@@ -1,0 +1,28 @@
+<h1>Lista de Vehículos</h1>
+<table border="1" cellpadding="5">
+    <tr>
+        <th>Placas</th>
+        <th>Marca</th>
+        <th>Modelo</th>
+        <th>Año</th>
+        <th>Kilometraje</th>
+        <th>Responsable</th>
+        <th>Acciones</th>
+    </tr>
+    {% for v in vehiculos %}
+    <tr>
+        <td>{{ v.placas }}</td>
+        <td>{{ v.marca }}</td>
+        <td>{{ v.modelo }}</td>
+        <td>{{ v.anio }}</td>
+        <td>{{ v.kilometraje_actual }}</td>
+        <td>{{ v.responsable }}</td>
+        <td>
+            <a href="{% url 'actualizar_kilometraje' v.id %}">Actualizar KM</a> |
+            <a href="{% url 'registrar-mantenimiento' %}">Mantenimiento</a> |
+            <a href="{% url 'registrar-siniestro' %}">Siniestro</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<a href="{% url 'dashboard' %}">Volver al Dashboard</a>

@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard Vehicular PRO{% endblock %}
+
+{% block content %}
+<h1 class="mb-4 text-center fw-bold">🚗 Panel de Control</h1>
+
+<!-- TARJETAS KPI -->
+<div class="row g-4 mb-4">
+    <div class="col-12 col-md-4">
+        <div class="card shadow border-0">
+            <div class="card-body text-center">
+                <i class="fas fa-car fa-2x text-primary mb-2"></i>
+                <h6>Total Vehículos</h6>
+                <h2 class="fw-bold">{{ total_vehiculos }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="card shadow border-0">
+            <div class="card-body text-center">
+                <i class="fas fa-tools fa-2x text-success mb-2"></i>
+                <h6>Mantenimientos</h6>
+                <h2 class="fw-bold">{{ total_mantenimientos }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="card shadow border-0">
+            <div class="card-body text-center">
+                <i class="fas fa-exclamation-triangle fa-2x text-danger mb-2"></i>
+                <h6>Siniestros</h6>
+                <h2 class="fw-bold">{{ total_siniestros }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- GRÁFICAS -->
+<div class="row g-4">
+    <div class="col-12 col-lg-8">
+        <div class="card shadow border-0">
+            <div class="card-body">
+                <h5 class="mb-3">📊 Estadísticas Generales</h5>
+                <canvas id="graficaBar"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-lg-4">
+        <div class="card shadow border-0">
+            <div class="card-body">
+                <h5 class="mb-3">📈 Distribución</h5>
+                <canvas id="graficaPie"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ALERTAS -->
+<div class="card shadow border-0 mt-4">
+    <div class="card-body">
+        <h5 class="mb-3">🚨 Vehículos con alerta</h5>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Vehículo</th>
+                        <th>Kilometraje</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for v in alertas %}
+                    <tr>
+                        <td>{{ v.marca }} {{ v.modelo }}</td>
+                        <td>{{ v.kilometraje_actual }}</td>
+                        <td><span class="badge bg-danger">Mantenimiento requerido</span></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center text-success">✔ Todo en orden</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a href="{% url 'reporte_costos' %}" class="btn btn-primary">📊 Ver Reporte Completo</a>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+new Chart(document.getElementById('graficaBar'), {
+    type: 'bar',
+    data: {
+        labels: ['Vehículos', 'Mantenimientos', 'Siniestros'],
+        datasets: [{ 
+            label: 'Cantidad', 
+            data: [{{ total_vehiculos }}, {{ total_mantenimientos }}, {{ total_siniestros }}], 
+            backgroundColor: ['#0d6efd', '#198754', '#dc3545'] 
+        }]
+    },
+    options: { responsive: true, plugins: { legend: { display: false } } }
+});
+
+new Chart(document.getElementById('graficaPie'), {
+    type: 'doughnut',
+    data: {
+        labels: ['Vehículos', 'Mantenimientos', 'Siniestros'],
+        datasets: [{ 
+            data: [{{ total_vehiculos }}, {{ total_mantenimientos }}, {{ total_siniestros }}],
+            backgroundColor: ['#0d6efd', '#198754', '#dc3545']
+        }]
+    }
+});
+</script>
+{% endblock %}
